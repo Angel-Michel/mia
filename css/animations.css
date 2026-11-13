@@ -1,0 +1,121 @@
+/* ==========================================================================
+   ANIMACIONES Y EFECTOS VISUALES DINÁMICOS
+   ========================================================================== */
+
+/* Temblor para impactos */
+@keyframes temblor {
+    0%, 30%, 60%, 90% { transform: translate(3px, 1px) rotate(0deg); }
+    10%, 40%, 70%, 100% { transform: translate(-3px, -2px) rotate(-1deg); }
+    20%, 50%, 80% { transform: translate(-2px, 3px) rotate(1deg); }
+}
+
+@keyframes temblor-extremo {
+    0%, 50%, 100% { transform: translate(5px, -3px) rotate(1.5deg); }
+    25%, 75% { transform: translate(-5px, 3px) rotate(-1.5deg); }
+}
+
+.shake {
+    animation: temblor 0.12s;
+}
+
+.shake-fuerte {
+    animation: temblor-extremo 0.1s infinite;
+}
+
+/* Efecto de explosión de pantalla */
+.explosion {
+    background-color: #ffffff !important;
+}
+
+/* Apariciones suaves con desplazamiento */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.fade-in {
+    animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Rebote dinámico para el balón */
+@keyframes rebotarBalon {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    30% {
+        transform: translateY(-22px) rotate(18deg);
+    }
+    60% {
+        transform: translateY(-8px) rotate(-10deg);
+    }
+}
+
+.balon-animado {
+    display: inline-block;
+    animation: rebotarBalon 1.6s infinite ease-in-out;
+    transform-origin: center bottom;
+}
+
+/* Latido de corazón */
+@keyframes latido {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.15); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.25); }
+    60% { transform: scale(1); }
+}
+
+.pulso-corazon {
+    display: inline-block;
+    animation: latido 1.8s infinite ease-in-out;
+}
+
+/* Resplandor neón */
+@keyframes neonGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 8px rgba(255, 0, 68, 0.6));
+    }
+    50% {
+        filter: drop-shadow(0 0 18px rgba(255, 0, 68, 0.95));
+    }
+}
+
+.resplandor-neon {
+    animation: neonGlow 2s infinite ease-in-out;
+}
+
+/* Barrido del escáner láser */
+@keyframes escanerLaser {
+    0% {
+        top: 0%;
+        opacity: 0.9;
+    }
+    50% {
+        top: 100%;
+        opacity: 1;
+    }
+    100% {
+        top: 0%;
+        opacity: 0.9;
+    }
+}
+
+/* Flotación de flores / elementos */
+@keyframes flotarSuave {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-7px);
+    }
+}
+
+.flotante {
+    animation: flotarSuave 3s infinite ease-in-out;
+}

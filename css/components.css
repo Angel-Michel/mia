@@ -1,0 +1,521 @@
+/* ==========================================================================
+   COMPONENTES ESPECÍFICOS Y NIVELES DEL JUEGO
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   CANVAS DE CONFETI (GLOBAL)
+   -------------------------------------------------------------------------- */
+#canvas-confetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* --------------------------------------------------------------------------
+   NIVEL 1: IMPACTO Y DEMOLICIÓN DEL CERROJO
+   -------------------------------------------------------------------------- */
+.panel-impacto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.puerta-grafico {
+    font-size: 55px;
+    transition: transform 0.1s ease;
+    user-select: none;
+    margin-bottom: 5px;
+}
+
+.barra-progreso-contenedor {
+    width: 100%;
+    max-width: 380px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+
+.barra-progreso-relleno {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff0044, #ff8800, #ff0044);
+    background-size: 200% 100%;
+    transition: width 0.15s ease-out;
+    box-shadow: 0 0 12px rgba(255, 0, 68, 0.8);
+}
+
+.barra-tiempo {
+    width: 100%;
+    max-width: 380px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.barra-tiempo-relleno {
+    height: 100%;
+    width: 100%;
+    background: #00ffaa;
+    transition: width 0.1s linear, background-color 0.3s;
+}
+
+.combo-texto {
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--gold);
+    min-height: 18px;
+    letter-spacing: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   NIVEL 2: ZONA OSCURA Y LINTERNA
+   -------------------------------------------------------------------------- */
+#nivel-2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #030305;
+    z-index: 50;
+    cursor: crosshair;
+    touch-action: none;
+    overflow: hidden;
+}
+
+#linterna {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: radial-gradient(circle 140px at 50% 50%, transparent 0%, rgba(2, 2, 4, 0.985) 100%);
+    z-index: 55;
+    transition: background 0.05s ease-out;
+}
+
+.radar-hud {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60;
+    text-align: center;
+    background: rgba(5, 5, 8, 0.85);
+    border: 1px solid rgba(255, 0, 68, 0.4);
+    padding: 10px 20px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    pointer-events: none;
+    width: 90%;
+    max-width: 450px;
+}
+
+#mensaje-terror {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.contador-objetivos {
+    font-size: 12px;
+    color: var(--primary);
+    margin-top: 4px;
+    letter-spacing: 1px;
+}
+
+.item-oculto {
+    position: absolute;
+    font-size: 52px;
+    cursor: pointer;
+    z-index: 52;
+    user-select: none;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s;
+    filter: brightness(0.9);
+}
+
+.item-oculto:hover {
+    transform: scale(1.25);
+    filter: brightness(1.3) drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+}
+
+.item-encontrado {
+    filter: drop-shadow(0 0 20px #00ff88) !important;
+    animation: rebotarBalon 1.5s infinite ease-in-out;
+    pointer-events: none;
+}
+
+#perrito {
+    top: 22%;
+    left: 20%;
+}
+
+#taco {
+    top: 72%;
+    left: 68%;
+}
+
+/* --------------------------------------------------------------------------
+   NIVEL 3: ESCÁNER BIOMÉTRICO (CANVAS NEÓN)
+   -------------------------------------------------------------------------- */
+.scanner-frame {
+    position: relative;
+    display: inline-block;
+    border: 2px solid var(--primary);
+    border-radius: 14px;
+    padding: 6px;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 25px rgba(255, 0, 68, 0.25);
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.laser-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #ff0044, #ffffff, #ff0044, transparent);
+    box-shadow: 0 0 10px #ff0044;
+    animation: escanerLaser 2.2s infinite ease-in-out;
+    pointer-events: none;
+    z-index: 5;
+}
+
+canvas#pizarra {
+    background-color: #0b0b12;
+    border-radius: 10px;
+    touch-action: none;
+    cursor: crosshair;
+    display: block;
+    margin: 0 auto;
+}
+
+.scanner-status {
+    font-size: 13px;
+    color: var(--text-muted);
+    min-height: 20px;
+    margin-bottom: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   TRANSICIÓN Y PANTALLA FINAL
+   -------------------------------------------------------------------------- */
+.corazon {
+    color: var(--primary);
+    font-size: clamp(24px, 5vw, 36px);
+    text-shadow: 0 0 20px rgba(255, 0, 68, 0.8);
+    display: block;
+    margin-bottom: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   CARTA SECRETA
+   -------------------------------------------------------------------------- */
+#carta-secreta {
+    text-align: left;
+    background: rgba(10, 10, 14, 0.9);
+    border: 1px solid rgba(255, 0, 68, 0.35);
+    border-radius: 14px;
+    padding: 24px 20px;
+    margin-top: 15px;
+    box-shadow: inset 0 0 25px rgba(255, 0, 68, 0.08);
+}
+
+.carta-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 0, 68, 0.3);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.carta-titulo {
+    color: var(--primary);
+    font-size: 20px;
+    margin-bottom: 0;
+    letter-spacing: 1px;
+}
+
+.sello-confidencial {
+    font-size: 11px;
+    color: var(--gold);
+    border: 1px dashed var(--gold);
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+}
+
+.carta-cuerpo {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #e4e4ed;
+}
+
+.carta-cuerpo p {
+    text-align: left;
+    margin-bottom: 16px;
+    color: #dedee8;
+}
+
+.carta-firma {
+    margin-top: 24px;
+    text-align: right;
+    font-size: 15px;
+    color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   LOS RAMOS INTERACTIVOS CON MENSAJES (NUEVA SECCIÓN ESPECIAL)
+   -------------------------------------------------------------------------- */
+.seccion-ramos {
+    margin-top: 35px;
+    padding-top: 25px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.2);
+    text-align: center;
+}
+
+.seccion-ramos-titulo {
+    color: #ffffff;
+    font-size: 20px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.seccion-ramos-subtitulo {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+.ramos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+    gap: 14px;
+    margin-bottom: 25px;
+}
+
+.ramo-card {
+    background: rgba(22, 22, 30, 0.9);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 16px 10px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.ramo-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary);
+    opacity: 0;
+    transition: opacity 0.25s;
+}
+
+.ramo-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 8px 25px var(--primary-glow);
+    background: rgba(28, 28, 40, 0.98);
+}
+
+.ramo-card:hover::before {
+    opacity: 1;
+}
+
+.ramo-icono {
+    font-size: 38px;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+    transition: transform 0.25s ease;
+}
+
+.ramo-card:hover .ramo-icono {
+    transform: scale(1.15) rotate(6deg);
+}
+
+.ramo-nombre {
+    font-size: 13px;
+    font-weight: bold;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.ramo-badge {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 8px;
+    background: rgba(255, 0, 68, 0.15);
+    color: var(--primary);
+    border: 1px solid rgba(255, 0, 68, 0.3);
+}
+
+/* Modal del Ramo Revelado */
+#modal-ramo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(3, 3, 6, 0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+    padding: 15px;
+}
+
+.modal-ramo-contenido {
+    background: #0f0f17;
+    border: 2px solid var(--primary);
+    border-radius: 16px;
+    padding: 26px 20px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 35px var(--primary-glow);
+    animation: fadeInScale 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+}
+
+.modal-ramo-icono {
+    font-size: 55px;
+    margin-bottom: 8px;
+}
+
+.modal-ramo-titulo {
+    color: var(--primary);
+    font-size: 20px;
+    margin-bottom: 14px;
+}
+
+.modal-ramo-mensaje {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #ededf5;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 20px;
+    border-left: 3px solid var(--primary);
+    text-align: left;
+}
+
+/* Minijuego de deshojar pétalos */
+.caja-petalo {
+    margin-top: 25px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+}
+
+#texto-petalo {
+    font-size: 14px;
+    color: var(--gold);
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: italic;
+    margin-top: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   SECCIÓN DE LA CITA FINAL Y RESPUESTA
+   -------------------------------------------------------------------------- */
+.seccion-cita {
+    margin-top: 35px;
+    padding: 24px 18px;
+    background: linear-gradient(180deg, rgba(255, 0, 68, 0.08) 0%, rgba(10, 10, 15, 0.95) 100%);
+    border: 1.5px solid rgba(255, 0, 68, 0.35);
+    border-radius: 14px;
+    text-align: center;
+}
+
+.seccion-cita h3 {
+    font-size: 19px;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.botones-cita {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+#respuesta-cita {
+    margin-top: 18px;
+    font-size: 16px;
+    color: #00ffaa;
+    font-weight: bold;
+    min-height: 24px;
+    animation: fadeInScale 0.4s ease;
+}
+
+/* --------------------------------------------------------------------------
+   VENTANA EMERGENTE (MODAL SISTEMA)
+   -------------------------------------------------------------------------- */
+#modal-sistema {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    backdrop-filter: blur(6px);
+    padding: 15px;
+}
+
+.modal-contenido {
+    background: #0d0d14;
+    border: 2px solid var(--primary);
+    padding: 26px 20px;
+    box-shadow: 0 0 30px var(--primary-glow);
+    border-radius: 12px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    animation: fadeInScale 0.3s ease;
+}
+
+.modal-contenido p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    line-height: 1.5;
+}

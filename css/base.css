@@ -1,0 +1,228 @@
+/* ==========================================================================
+   ESTILOS BASE Y VARIABLES GLOBALES - PARA MÍA 🖤
+   ========================================================================== */
+
+:root {
+    --bg-dark: #08080c;
+    --card-bg: rgba(16, 16, 22, 0.95);
+    --primary: #ff0044;
+    --primary-glow: rgba(255, 0, 68, 0.45);
+    --primary-light: #ff3366;
+    --accent: #ff4d79;
+    --gold: #ffbe0b;
+    --text-main: #f5f5fa;
+    --text-muted: #a0a0b2;
+    --border-color: rgba(255, 255, 255, 0.14);
+    --border-glow: rgba(255, 0, 68, 0.3);
+    --font-terminal: 'Courier New', Courier, monospace;
+    --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-terminal);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+    padding: 24px 12px;
+    background-image: 
+        radial-gradient(circle at 10% 15%, rgba(255, 0, 68, 0.1) 0%, transparent 45%),
+        radial-gradient(circle at 90% 85%, rgba(255, 77, 121, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(20, 20, 30, 0.8) 0%, transparent 100%);
+    background-attachment: fixed;
+}
+
+/* Control flotante de audio */
+.audio-control-bar {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(10, 10, 15, 0.85);
+    border: 1px solid rgba(255, 0, 68, 0.35);
+    padding: 7px 14px;
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    transition: all 0.25s ease;
+}
+
+.audio-control-bar:hover {
+    border-color: var(--primary);
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.btn-audio {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-terminal);
+    font-weight: bold;
+}
+
+.btn-audio:hover {
+    color: var(--primary);
+}
+
+.audio-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #555;
+    transition: background 0.3s;
+}
+
+.audio-pulse.playing {
+    background: #00ff88;
+    box-shadow: 0 0 10px #00ff88;
+    animation: latido 1.2s infinite;
+}
+
+/* Contenedor Principal */
+#contenedor {
+    width: 100%;
+    max-width: 660px;
+    padding: 30px 24px;
+    background: var(--card-bg);
+    border: 1.5px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 0, 68, 0.15);
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(14px);
+    text-align: center;
+    margin: auto;
+}
+
+h1 {
+    font-size: clamp(20px, 4.2vw, 26px);
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+    font-weight: 800;
+}
+
+h2 {
+    font-size: clamp(18px, 3.8vw, 22px);
+    margin-bottom: 12px;
+}
+
+p {
+    font-size: clamp(14px, 2.8vw, 16px);
+    line-height: 1.6;
+    margin-bottom: 22px;
+    color: #dedee8;
+}
+
+/* Insignias de Misión */
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 14px;
+    background: rgba(255, 0, 68, 0.15);
+    color: var(--primary);
+    border: 1px solid rgba(255, 0, 68, 0.35);
+}
+
+/* Botones */
+.boton {
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 14px 28px;
+    font-size: clamp(14px, 2.8vw, 16px);
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-top: 10px;
+    font-family: var(--font-terminal);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
+}
+
+.boton:hover {
+    background-color: var(--primary);
+    color: #ffffff;
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 20px var(--primary-glow);
+}
+
+.boton:active {
+    transform: translateY(1px) scale(0.97);
+}
+
+.boton-secundario {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid var(--border-color);
+    box-shadow: none;
+}
+
+.boton-secundario:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-color: #ffffff;
+    box-shadow: none;
+}
+
+.boton-romantico {
+    background: linear-gradient(135deg, #ff0044, #ff4d79);
+    color: #ffffff;
+    box-shadow: 0 4px 20px rgba(255, 0, 68, 0.4);
+}
+
+.boton-romantico:hover {
+    background: linear-gradient(135deg, #e6003d, #ff3366);
+    box-shadow: 0 6px 25px rgba(255, 0, 68, 0.7);
+}
+
+.oculto {
+    display: none !important;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #0a0a0f;
+}
+::-webkit-scrollbar-thumb {
+    background: #2a2a35;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
