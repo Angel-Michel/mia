@@ -5,67 +5,234 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para Mía 🖤</title>
     <style>
-        /* Aquí le damos el estilo Blanco y Negro que le gusta */
-        body {
-            background-color: #000000; /* Fondo negro */
-            color: #ffffff; /* Letras blancas */
-            font-family: 'Courier New', Courier, monospace; /* Letra tipo máquina de escribir/película */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
+        body { background-color: #000000; color: #ffffff; font-family: 'Courier New', Courier, monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; transition: background-color 0.1s; overflow: hidden; }
+        
+        #contenedor { max-width: 600px; padding: 20px; border: 2px solid #ffffff; border-radius: 10px; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); transition: box-shadow 0.1s, border-color 0.1s; position: relative; z-index: 2; background-color: black; }
+        
+        h1 { font-size: 24px; margin-bottom: 20px; }
+        p { font-size: 16px; line-height: 1.5; margin-bottom: 30px; }
+        .boton { background-color: #ffffff; color: #000000; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; cursor: pointer; border-radius: 5px; transition: transform 0.1s ease; margin-top: 10px; font-family: 'Courier New', Courier, monospace; }
+        .boton:hover { background-color: #cccccc; transform: scale(1.05); }
+        .oculto { display: none !important; }
 
-        #contenedor {
-            max-width: 600px;
-            padding: 20px;
-            border: 2px solid #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        @keyframes temblor {
+            0%, 30%, 60%, 90% { transform: translate(2px, 1px) rotate(0deg); }
+            10%, 40%, 70%, 100% { transform: translate(-2px, -1px) rotate(-1deg); }
+            20%, 50%, 80% { transform: translate(-1px, 2px) rotate(1deg); }
         }
+        .shake { animation: temblor 0.1s; }
+        .shake-fuerte { animation: temblor 0.1s infinite; } 
+        .explosion { background-color: #ffffff !important; }
 
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
+        /* NIVEL 2 */
+        #nivel-2 { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #000000; z-index: 10; cursor: crosshair; }
+        #linterna { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; background: radial-gradient(circle 120px at 50% 50%, transparent 0%, rgba(0,0,0,0.98) 100%); z-index: 15; }
+        .item-oculto { position: absolute; font-size: 50px; cursor: pointer; z-index: 12; user-select: none; transition: filter 0.3s; }
+        .item-encontrado { filter: drop-shadow(0 0 15px #ffffff); }
+        #mensaje-terror { position: absolute; top: 30px; width: 100%; text-align: center; color: #ffffff; z-index: 20; opacity: 0.7; font-weight: bold; pointer-events: none; }
 
-        p {
-            font-size: 16px;
-            line-height: 1.5;
-            margin-bottom: 30px;
-        }
+        /* NIVEL 3 Y FINAL */
+        canvas { background-color: #ffffff; border-radius: 10px; touch-action: none; cursor: crosshair; box-shadow: 0 0 20px rgba(255,255,255,0.5); margin-bottom: 20px; }
+        #mensaje-final, #carta-secreta { animation: fadeIn 2s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .corazon { color: #ff0044; font-size: 40px; text-shadow: 0 0 15px #ff0044; }
 
-        .boton {
-            background-color: #ffffff;
-            color: #000000;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
+        /* ANIMACIÓN DE FÚTBOL Y FLORES */
+        @keyframes rebotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .balon-animado { display: inline-block; animation: rebotar 1.5s infinite ease-in-out; font-size: 20px; }
+        .flores-futbol { font-size: 50px; margin-top: 40px; text-shadow: 0 0 20px #ff0044; display: flex; justify-content: center; gap: 15px; align-items: center; }
 
-        .boton:hover {
-            background-color: #cccccc;
-            transform: scale(1.05);
-        }
+        /* VENTANA EMERGENTE (MODAL) PERSONALIZADA */
+        #modal-sistema { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 999; }
+        .modal-contenido { background: #000000; border: 2px solid #ff0044; padding: 30px; box-shadow: 0 0 20px #ff0044; border-radius: 5px; max-width: 400px; text-align: center; }
+        .modal-contenido p { font-size: 18px; margin-bottom: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
+    <audio id="musica-fondo" src="musica.mp4"></audio>
 
-    <div id="contenedor">
-        <h1>OPERACIÓN: MÍA</h1>
-        <p>Dicen que los detalles lo son todo. <br><br>
-        Para descubrir el mensaje clasificado que tengo para ti, primero debes demostrar que nuestras mentes están conectadas superando una pequeña prueba.</p>
-        
-        <!-- Este botón aún no hace nada, le daremos vida en la Parte 2 -->
-        <button class="boton" id="btn-iniciar">Aceptar el reto</button>
+    <!-- VENTANA EMERGENTE PERSONALIZADA -->
+    <div id="modal-sistema" class="oculto">
+        <div class="modal-contenido">
+            <p id="texto-modal">Mensaje del sistema</p>
+            <button class="boton" id="btn-cerrar-modal">ENTENDIDO</button>
+        </div>
     </div>
 
+    <div id="contenedor">
+        <!-- PANTALLA INICIO -->
+        <div id="pantalla-inicio">
+            <h1>OPERACIÓN: MÍA</h1>
+            <p>Para descubrir el mensaje clasificado, debes superar el protocolo.</p>
+            <button class="boton" id="btn-iniciar">Aceptar el reto</button>
+        </div>
+
+        <!-- NIVEL 1 -->
+        <div id="nivel-1" class="oculto">
+            <h1>NIVEL 1: IMPACTO</h1>
+            <p>La puerta está bloqueada. Tienes 5 segundos para derribarla.</p>
+            <button class="boton" id="btn-golpear">¡GOLPEA! (0/25)</button>
+        </div>
+
+        <!-- NIVEL 3 -->
+        <div id="nivel-3" class="oculto">
+            <h1>FASE FINAL: IDENTIFICACIÓN</h1>
+            <p>Dibuja un corazón en el escáner para confirmar tu identidad.</p>
+            <canvas id="pizarra" width="300" height="300"></canvas>
+            <br>
+            <button class="boton" id="btn-revelar">Confirmar Identidad</button>
+        </div>
+
+        <!-- MENSAJE FINAL (Transición) -->
+        <div id="mensaje-final" class="oculto">
+            <h1 class="corazon">❤️ ¡ACCESO CONCEDIDO! ❤️</h1>
+            <p>Sobreviviste a los golpes, a la oscuridad y superaste el escáner.</p>
+            <p>Tu recompensa ha sido desbloqueada.</p>
+            <button class="boton" id="btn-abrir-carta" style="margin-top: 30px;">Desencriptar Archivo Final</button>
+        </div>
+
+        <!-- LA CARTA MEJORADA -->
+        <div id="carta-secreta" class="oculto">
+            <h2 style="color: #ff0044; border-bottom: 1px solid #ff0044; padding-bottom: 10px;">Para Mía</h2>
+            <div style="text-align: left; font-size: 16px; line-height: 1.8; margin-top: 20px;">
+                <p>Mía,</p>
+                <p>Me encanta cómo te apasionas cuando hablas de fútbol <span class="balon-animado">⚽</span>, cómo compartimos ese gusto raro por las cosas de terror y lo divertida que eres. Quería hacer algo diferente para ti.</p>
+                <p>Y como prometí, nos esperan unos buenos tacos, un postre y una gran cita.</p>
+                <p style="margin-top: 30px;">Con cariño,<br><strong>Ángel</strong></p>
+            </div>
+            
+            <div class="flores-futbol">
+                🌹 🥀 ⚽ 🥀 🌹
+            </div>
+        </div>
+    </div>
+
+    <!-- NIVEL 2 -->
+    <div id="nivel-2" class="oculto">
+        <div id="mensaje-terror">Encuentra a tu guardián y tus provisiones...</div>
+        <div id="linterna"></div>
+        <div id="perrito" class="item-oculto" style="top: 20%; left: 25%;">🐶</div>
+        <div id="taco" class="item-oculto" style="top: 75%; left: 70%;">🌮</div>
+    </div>
+
+    <script>
+        // --- SISTEMA DE MODALES (Reemplaza los alert) ---
+        const modalSistema = document.getElementById('modal-sistema');
+        const textoModal = document.getElementById('texto-modal');
+        const btnCerrarModal = document.getElementById('btn-cerrar-modal');
+        let callbackModal = null;
+
+        function mostrarAlerta(mensaje, callback) {
+            textoModal.innerText = mensaje;
+            modalSistema.classList.remove('oculto');
+            callbackModal = callback;
+        }
+
+        btnCerrarModal.addEventListener('click', () => {
+            modalSistema.classList.add('oculto');
+            if (callbackModal) callbackModal();
+        });
+
+        // --- NAVEGACIÓN GENERAL ---
+        const btnIniciar = document.getElementById('btn-iniciar');
+        const pantallaInicio = document.getElementById('pantalla-inicio');
+        const contenedor = document.getElementById('contenedor');
+        const nivel1 = document.getElementById('nivel-1');
+        const nivel2 = document.getElementById('nivel-2');
+        const nivel3 = document.getElementById('nivel-3');
+        const mensajeFinal = document.getElementById('mensaje-final');
+        const cartaSecreta = document.getElementById('carta-secreta');
+        const btnRevelar = document.getElementById('btn-revelar');
+        const btnAbrirCarta = document.getElementById('btn-abrir-carta');
+        const musicaFondo = document.getElementById('musica-fondo');
+
+        btnIniciar.addEventListener('click', () => { pantallaInicio.classList.add('oculto'); nivel1.classList.remove('oculto'); });
+
+        // --- LÓGICA NIVEL 1 ---
+        const btnGolpear = document.getElementById('btn-golpear');
+        let golpes = 0, temporizador, juegoIniciado = false;
+        const META = 25, TIEMPO = 5000;
+
+        function aplicarEfectoDanio() {
+            btnGolpear.classList.remove('shake'); contenedor.classList.remove('shake-fuerte');
+            void btnGolpear.offsetWidth; 
+            btnGolpear.classList.add('shake'); contenedor.classList.add('shake-fuerte');
+            const intensidad = golpes / META;
+            const resplandor = 15 + (intensidad * 50);
+            const blanco = Math.round(255 * (1 - intensidad));
+            const colorActual = `rgb(255, ${blanco}, ${blanco})`;
+            contenedor.style.boxShadow = `0 0 ${resplandor}px ${colorActual}`;
+            contenedor.style.borderColor = colorActual;
+            btnGolpear.style.color = `rgb(${Math.round(255 * intensidad)}, 0, 0)`;
+        }
+
+        btnGolpear.addEventListener('click', () => {
+            if (!juegoIniciado) { juegoIniciado = true; temporizador = setTimeout(perderNivel1, TIEMPO); }
+            golpes++; btnGolpear.innerText = `¡GOLPEA! (${golpes}/${META})`; aplicarEfectoDanio();
+            if (golpes >= META) {
+                clearTimeout(temporizador); contenedor.classList.remove('shake-fuerte'); document.body.classList.add('explosion');
+                setTimeout(() => {
+                    document.body.classList.remove('explosion'); 
+                    mostrarAlerta('¡Boom! Puerta derribada. Accediendo a la zona oscura...', () => {
+                        contenedor.classList.add('oculto'); nivel2.classList.remove('oculto');
+                    });
+                }, 150);
+            }
+        });
+
+        function perderNivel1() {
+            juegoIniciado = false; golpes = 0; btnGolpear.innerText = `¡GOLPEA! (0/${META})`;
+            contenedor.classList.remove('shake-fuerte'); contenedor.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.2)';
+            contenedor.style.borderColor = '#ffffff'; btnGolpear.style.color = '#000000';
+            mostrarAlerta('Te faltó velocidad. ¡Intenta de nuevo!');
+        }
+
+        // --- LÓGICA NIVEL 2 ---
+        const linterna = document.getElementById('linterna'), perrito = document.getElementById('perrito'), taco = document.getElementById('taco');
+        let pEncontrado = false, tEncontrado = false;
+
+        function actualizarLinterna(x, y) { linterna.style.background = `radial-gradient(circle 120px at ${x}px ${y}px, transparent 0%, rgba(0,0,0,0.98) 100%)`; }
+        nivel2.addEventListener('mousemove', (e) => actualizarLinterna(e.clientX, e.clientY));
+        nivel2.addEventListener('touchmove', (e) => actualizarLinterna(e.touches[0].clientX, e.touches[0].clientY));
+
+        function checarVictoriaNivel2() {
+            if (pEncontrado && tEncontrado) {
+                linterna.style.background = 'none';
+                setTimeout(() => {
+                    mostrarAlerta('¡Provisiones a salvo! Fase final desbloqueada.', () => {
+                        nivel2.classList.add('oculto'); contenedor.classList.remove('oculto');
+                        nivel1.classList.add('oculto'); nivel3.classList.remove('oculto');
+                    });
+                }, 500);
+            }
+        }
+        perrito.addEventListener('click', () => { pEncontrado = true; perrito.classList.add('item-encontrado'); checarVictoriaNivel2(); });
+        taco.addEventListener('click', () => { tEncontrado = true; taco.classList.add('item-encontrado'); checarVictoriaNivel2(); });
+
+        // --- LÓGICA NIVEL 3 ---
+        const canvas = document.getElementById('pizarra'), ctx = canvas.getContext('2d');
+        let pintando = false;
+
+        function iniciarPosicion(e) { pintando = true; dibujar(e); }
+        function terminarPosicion() { pintando = false; ctx.beginPath(); }
+        function obtenerCoordenadas(e) { const rect = canvas.getBoundingClientRect(); const clienteX = e.clientX || (e.touches && e.touches[0].clientX); const clienteY = e.clientY || (e.touches && e.touches[0].clientY); return { x: clienteX - rect.left, y: clienteY - rect.top }; }
+        function dibujar(e) {
+            if (!pintando) return; e.preventDefault(); const coord = obtenerCoordenadas(e);
+            ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.strokeStyle = '#ff0044';
+            ctx.lineTo(coord.x, coord.y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(coord.x, coord.y);
+        }
+
+        canvas.addEventListener('mousedown', iniciarPosicion); canvas.addEventListener('mouseup', terminarPosicion); canvas.addEventListener('mousemove', dibujar);
+        canvas.addEventListener('touchstart', iniciarPosicion); canvas.addEventListener('touchend', terminarPosicion); canvas.addEventListener('touchmove', dibujar);
+
+        // --- DISPARADORES FINALES ---
+        btnRevelar.addEventListener('click', () => {
+            nivel3.classList.add('oculto'); mensajeFinal.classList.remove('oculto');
+            contenedor.style.borderColor = 'transparent'; contenedor.style.boxShadow = 'none';
+            musicaFondo.play(); 
+        });
+
+        btnAbrirCarta.addEventListener('click', () => { mensajeFinal.classList.add('oculto'); cartaSecreta.classList.remove('oculto'); });
+    </script>
 </body>
 </html>
